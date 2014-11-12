@@ -1,0 +1,6 @@
+class Foo
+	def main
+	end
+end
+
+(2 + 2) /3.14

@@ -1,31 +1,15 @@
+require_relative 'builtins'
+
 module Lang
   class Context
 
+    include Lang::Builtins
+
     def initialize
-      @env = {
-        puts: ->(x){puts x[0].eval(self)},
-        inc: ->(x){
-            puts "incrementing #{x[0].eval(self)}"
-            x[0].eval(self)+1
-           },
-        dec: ->(args) {
-          args[0].eval(self)-1
-        },
-        mul: ->(args) {
-          args[0].eval(self) * args[1].eval(self)
-        },
-        if: ->(args) {
-          if args[0].eval(self) 
-            args[1].eval(self)
-          else
-            args[2].eval(self)
-          end
-        },
-        gt: ->(args) {
-          #puts "#{args[0].eval(self)} > #{args[1].eval(self)}?"
-          args[0].eval(self) > args[1].eval(self)
-        }
-      }
+      @env = {}
+      Lang::Builtins.instance_methods.each do |sym|
+        @env[sym] = method sym
+      end
     end
 
     def get(name)

@@ -7,6 +7,7 @@ module Lang::AST
       @arguments = arguments
       @body = body
     end
+
     def eval(context)
       context.set(name.to_sym, ->(x){
         arguments.each_with_index do |arg, i|

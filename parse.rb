@@ -6,6 +6,4 @@ require_relative 'context'
 
 parser = Lang::Parser.new(STDIN.read)
 ast = parser.parse
-puts ast.statements
-
-ast.eval(Lang::Context.new)
+p ast.statements

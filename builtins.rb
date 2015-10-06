@@ -25,34 +25,16 @@ module Lang
       end
     end
 
-
-    def +(args)
-      operator(args, :+)
-    end
-
-    def -(args)
-      operator(args, :-)
-    end
-
-    def *(args)
-      operator(args, :*)
-    end
-
-    def /(args)
-      operator(args, :/)
-    end
-
-    def >(args)
-      operator(args, :>)
-    end
-
-    def <(args)
-      operator(args, :<)
+    [:+, :-, :*, :/, :>, :<].each do |sym|
+      define_method(sym) do |args|
+        operator(args, sym)
+      end
     end
 
     def ^(args)
       operator(args, :**)
     end
+
   private
     def evaluate(args)
       args.map{|x| x.eval(self)}

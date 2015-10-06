@@ -26,7 +26,7 @@ module Lang
     TOKENS = [
       [:WHITESPACE, /[ \t\f]+/m ],
       [:NEWLINE, /[\n\r]/m],
-      [:NUMBER, /-?(([1-9]\d*)|0)(\.[0-9]([0-9])*)?/m, ->(match){match[0].to_f}],
+      [:NUMBER, /(([1-9]\d*)|0)(\.[0-9]([0-9])*)?/m, ->(match){match[0].to_f}],
       [:FUNCTION, /function/m],
       [:END, /end/m],
       [:ID, /[a-zA-Z_\$][\$a-zA-Z_0-9]*/ , ->m { m[0] } ],

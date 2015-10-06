@@ -11,29 +11,59 @@ module Lang
 
     def body
       stmts = []
-      e = expression
+      e = top_level
       while e 
         stmts.push e
-        e = expression
+        e = top_level
       end
       AST::Body.new(stmts)
     end
 
-    def expression
+    def top_level
       swallow
       return nil if peek.nil? or peek.type == :END
       e = case peek.type
       when :FUNCTION
         function
-      when :ID
-        call
-      when :NUMBER
-        AST::Number.new(next_token.value)
+      when :ID, :NUMBER
+        expression 0
       else
         nil
       end
       swallow
       e
+    end
+
+    def expression(precedence)
+      lhs = atom
+
+      loop do
+        curr = peek
+        break if curr.nil?
+
+        info = curr.info
+        break if info.nil?
+
+        op_prec, op_assoc = info
+        break if op_prec < precedence
+
+        next_token #swallow operator
+        rhs = expression op_prec+op_assoc
+        lhs = operator curr, lhs, rhs
+      end
+      lhs
+    end
+
+    def atom
+      if peek.type == :NUMBER
+        AST::Number.new(next_token.value)
+      else
+        call
+      end
+    end
+
+    def operator(op, lhs, rhs)
+      AST::Call.new(function: op.value, args: [lhs, rhs])
     end
 
     def call
@@ -46,7 +76,7 @@ module Lang
       end
       args = []
       while peek.type != :RPAREN
-        args.push expression
+        args.push(expression 0)
         #if peek.type == :ID
         # args.push AST::Variable.new(name: next_token.value)
         #elsif peek.type == :NUMBER

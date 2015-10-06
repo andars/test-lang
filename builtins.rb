@@ -25,8 +25,32 @@ module Lang
       end
     end
 
-    def gt(args)
+    def +(args)
+      args[0].eval(self) + args[1].eval(self)
+    end
+
+    def -(args)
+      args[0].eval(self) - args[1].eval(self)
+    end
+
+    def *(args)
+      args[0].eval(self) * args[1].eval(self)
+    end
+
+    def /(args)
+      args[0].eval(self) / args[1].eval(self)
+    end
+
+    def >(args)
       args[0].eval(self) > args[1].eval(self)
+    end
+
+    def <(args)
+      args[0].eval(self) < args[1].eval(self)
+    end
+
+    def ^(args)
+      args[0].eval(self) ** args[1].eval(self)
     end
   end
 end

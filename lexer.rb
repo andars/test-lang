@@ -29,13 +29,16 @@ module Lang
       [:NUMBER, /-?(([1-9]\d*)|0)(\.[0-9]([0-9])*)?/m, ->(match){match[0].to_f}],
       [:FUNCTION, /function/m],
       [:END, /end/m],
-      [:ID, /[a-zA-Z_\$][\$a-zA-Z_0-9]*/, ->m { m[0] } ],
-      [:PLUS, /\+/m],
-      [:MINUS, /-/m],
-      [:LPAREN, /\(/m],
-      [:RPAREN, /\)/m],
-      [:STAR, /\*/m],
-      [:SLASH, /\//m],
+      [:ID, /[a-zA-Z_\$][\$a-zA-Z_0-9]*/ , ->m { m[0] } ],
+      [:PLUS, /\+/m, ->m { m[0] } ],
+      [:DASH, /-/m, ->m { m[0] } ],
+      [:LPAREN, /\(/m, ->m { m[0] } ],
+      [:RPAREN, /\)/m, ->m { m[0] } ],
+      [:STAR, /\*/m, ->m { m[0] } ],
+      [:SLASH, /\//m, ->m { m[0] } ],
+      [:CARET, /\^/m, ->m { m[0] } ],
+      [:LT, /</m, ->m { m[0] } ],
+      [:GT, />/m, ->m { m[0] } ],
       [:COMMA, /,/m]
     ].map do |rule|
       [rule[0], /\G#{rule[1].source}/m, rule[2]]

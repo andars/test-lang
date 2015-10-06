@@ -61,19 +61,25 @@ module Lang
       assert_token next_token, :RPAREN
       AST::Call.new(function: id, args: args) 
     end
+
     def reference(id)
       AST::Variable.new(name: id)
     end
+    
     def function
       assert_token next_token, :FUNCTION
       assert_token next_token, :ID
       name = token.value
+
       args = []
+      assert_token next_token, :LPAREN
       while peek.type == :ID
         args.push next_token.value
         break if peek.type != :COMMA
         next_token #swallow comma
       end
+      assert_token next_token, :RPAREN
+
       assert_token next_token, :BEGIN
       fun = AST::Function.new(name: name, arguments:args, body: body)
       assert_token next_token, :END

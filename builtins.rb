@@ -25,32 +25,41 @@ module Lang
       end
     end
 
+
     def +(args)
-      args[0].eval(self) + args[1].eval(self)
+      operator(args, :+)
     end
 
     def -(args)
-      args[0].eval(self) - args[1].eval(self)
+      operator(args, :-)
     end
 
     def *(args)
-      args[0].eval(self) * args[1].eval(self)
+      operator(args, :*)
     end
 
     def /(args)
-      args[0].eval(self) / args[1].eval(self)
+      operator(args, :/)
     end
 
     def >(args)
-      args[0].eval(self) > args[1].eval(self)
+      operator(args, :>)
     end
 
     def <(args)
-      args[0].eval(self) < args[1].eval(self)
+      operator(args, :<)
     end
 
     def ^(args)
-      args[0].eval(self) ** args[1].eval(self)
+      operator(args, :**)
+    end
+  private
+    def evaluate(args)
+      args.map{|x| x.eval(self)}
+    end
+
+    def operator(args,sym)
+      evaluate(args).inject(sym)
     end
   end
 end

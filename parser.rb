@@ -42,7 +42,7 @@ module Lang
       if peek.type != :LPAREN
         return reference(id)
       else
-        next_token
+        next_token #swallow LPAREN
       end
       args = []
       while peek.type != :RPAREN
@@ -80,7 +80,7 @@ module Lang
       end
       assert_token next_token, :RPAREN
 
-      assert_token next_token, :BEGIN
+      assert_token next_token, :NEWLINE
       fun = AST::Function.new(name: name, arguments:args, body: body)
       assert_token next_token, :END
       fun

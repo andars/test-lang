@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require_relative 'ast'
 require_relative 'token'
 require_relative 'lexer'

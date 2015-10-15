@@ -9,9 +9,19 @@ fine with it for now. Primitives are borrowed from ruby.
 
 This works:
 ```
-function factorial n
+function factorial(n)
   if ( n > 1, n * factorial(n-1), 1)
 end
 puts(factorial(3))
 ```
 
+This does too:
+
+```
+function f()
+  function g(x)
+    42+x
+  end
+end
+puts(f()(2))
+```

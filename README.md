@@ -4,8 +4,8 @@ Experiment in programming language development.
 
 Pretty massive kludge as of now, but educational so it's chill.
 
-It doesn't have integers, but that didn't stop javascript so I'm
-fine with it for now.
+It doesn't have integers per se, but that didn't stop javascript so I'm
+fine with it for now. Primitives are borrowed from ruby.
 
 This works:
 ```

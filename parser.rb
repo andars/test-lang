@@ -49,7 +49,10 @@ module Lang
 
     def atom
       if peek.type == :NUMBER
-        AST::Number.new(next_token.value)
+        AST::Number.new(next_token.value.to_i)
+      elsif peek.type == :DASH
+        next_token
+        AST::Number.new(-next_token.value.to_i)
       elsif peek.type == :FUNCTION
         function
       else

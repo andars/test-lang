@@ -22,14 +22,7 @@ module Lang
     def top_level
       swallow
       return nil if peek.nil? or peek.type == :END
-      e = case peek.type
-      when :FUNCTION
-        function
-      when :ID, :NUMBER
-        expression 0
-      else
-        nil
-      end
+      e = expression 0
       swallow
       e
     end
@@ -57,13 +50,15 @@ module Lang
     def atom
       if peek.type == :NUMBER
         AST::Number.new(next_token.value)
+      elsif peek.type == :FUNCTION
+        function
       else
         call
       end
     end
 
     def operator(op, lhs, rhs)
-      AST::Call.new(function: op.value, args: [lhs, rhs])
+      AST::Call.new(function: reference(op.value), args: [lhs, rhs])
     end
 
     def call
@@ -71,25 +66,31 @@ module Lang
       id = token.value
       if peek.type != :LPAREN
         return reference(id)
-      else
+      end
+
+      callee = reference(id)
+
+      while (peek.type == :LPAREN) 
         next_token #swallow LPAREN
-      end
-      args = []
-      while peek.type != :RPAREN
-        args.push(expression 0)
-        #if peek.type == :ID
-        # args.push AST::Variable.new(name: next_token.value)
-        #elsif peek.type == :NUMBER
-        # args.push AST::Number.new(next_token.value)
-        #end
-        if peek.nil? or peek.type != :COMMA
-          break
-        elsif !peek.nil? and peek.type == :COMMA
-          next_token
+        args = []
+        while peek.type != :RPAREN
+          args.push(expression 0)
+          #if peek.type == :ID
+          # args.push AST::Variable.new(name: next_token.value)
+          #elsif peek.type == :NUMBER
+          # args.push AST::Number.new(next_token.value)
+          #end
+          if peek.nil? or peek.type != :COMMA
+            break
+          elsif !peek.nil? and peek.type == :COMMA
+            next_token
+          end
         end
+        assert_token next_token, :RPAREN
+
+        callee = AST::Call.new(function: callee, args:args)
       end
-      assert_token next_token, :RPAREN
-      AST::Call.new(function: id, args: args) 
+      callee
     end
 
     def reference(id)

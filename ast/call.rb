@@ -7,7 +7,7 @@ module Lang::AST
     end
 
     def eval(context)
-      context.get(function.to_sym).(args)#.map{ |arg| arg.eval(context)})
+      function.eval(context).(args)#.map{ |arg| arg.eval(context)})
     end
   end
 end
